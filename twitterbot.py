@@ -9,6 +9,7 @@ import re
 import sys
 import time
 from datetime import date
+import config
 
 class Settings:
 	"""
@@ -16,22 +17,11 @@ class Settings:
 	
 	Enter the RSS feed you want to tweet, or keywords you want to retweet.
 	"""
-	FeedUrl = "https://blog.medium.com/feed"               # RSS feed to read and post tweets from.
+	FeedUrl = ["https://blog.medium.com/feed", "https://css-tricks.com/feed/"] # RSS feed to read and post tweets from.
 	PostedUrlsOutputFile = "posted-urls.log"           # Log file to save all tweeted RSS links (one URL per line).
 	PostedRetweetsOutputFile = "posted-retweets.log"   # Log file to save all retweeted tweets (one tweetid per line).
 	RetweetIncludeWords = ["#webdev", "#webdesign", "#javascript"]                 # Include tweets with these words when retweeting.
-	RetweetExcludeWords = []                           # Do not include tweets with these words when retweeting.
-
-class TwitterAuth:
-	"""
-	Twitter authentication settings.
-
-	Create a Twitter app at https://apps.twitter.com/ and generate key, secret etc. and insert them here.
-	"""
-	ConsumerKey = "eCVv1lQrzBstTmxBcUwpP89ED"
-	ConsumerSecret = "0bQi2GheEqztIinU7UaFwaP3qi6JlDu5rsMBWlums6gc0NBYmV"
-	AccessToken = "1821065959-XzlVYPESE9Ovdj5DXdIJIKmmAQFeBoYPp4KyZtg"
-	AccessTokenSecret = "9Y5g18B5SkFbO30ZsJ5DHoFqN1bQHZh4nrJVSinO78J0q"
+	RetweetExcludeWords = []                           # Do not include tweets with these words when retweeting.	
 
 def compose_message(rss_item):
 	"""Compose a tweet from title, link, and description, and then return the final tweet message."""
@@ -46,7 +36,7 @@ def shorten_text(text, maxlength):
 def post_tweet(message):
 	"""Post tweet message to account."""
 	try:
-		twitter = Twython(TwitterAuth.ConsumerKey, TwitterAuth.ConsumerSecret, TwitterAuth.AccessToken, TwitterAuth.AccessTokenSecret)
+		twitter = Twython(config.ConsumerKey, config.ConsumerSecret, config.AccessToken, config.AccessTokenSecret)
 		twitter.update_status(status = message)
 	except TwythonError as e:
 		print(e)
@@ -75,7 +65,7 @@ def get_query():
 def search_and_retweet(query, count=10):
 	"""Search for a query in tweets, and retweet those tweets."""
 	try:
-		twitter = Twython(TwitterAuth.ConsumerKey, TwitterAuth.ConsumerSecret, TwitterAuth.AccessToken, TwitterAuth.AccessTokenSecret)
+		twitter = Twython(config.ConsumerKey, config.ConsumerSecret, config.AccessToken, config.AccessTokenSecret)
 		search_results = twitter.search(q=query, count=count)
 	except TwythonError as e:
 		print(e)
