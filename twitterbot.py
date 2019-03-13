@@ -17,11 +17,11 @@ class Settings:
 	
 	Enter the RSS feed you want to tweet, or keywords you want to retweet.
 	"""
-	FeedUrl = ["https://blog.medium.com/feed", "https://css-tricks.com/feed/"] # RSS feed to read and post tweets from.
+	FeedUrl = "https://www.creativebloq.com/feed" # RSS feed to read and post tweets from.
 	PostedUrlsOutputFile = "posted-urls.log"           # Log file to save all tweeted RSS links (one URL per line).
 	PostedRetweetsOutputFile = "posted-retweets.log"   # Log file to save all retweeted tweets (one tweetid per line).
-	RetweetIncludeWords = ["#webdev", "#webdesign", "#javascript"]                 # Include tweets with these words when retweeting.
-	RetweetExcludeWords = []                           # Do not include tweets with these words when retweeting.	
+	RetweetIncludeWords = ["#webdesign", "#webdev", "#javascript", "#evolveweb"]                 # Include tweets with these words when retweeting.
+	RetweetExcludeWords = ["100DaysOfCode", "seo", "WebDesignCompany", "awardwinning", "cmdesign", "Services", "WIX", "tourismmarketing", "bootstrap", "support", "hosting", "java", "digitalmarketingagency", "growthhacking", "WeAreDigitalDesign", "music", "CMSblog", " webdesignservice", "bestwebdesigncompany", "Appmonks", "branding", "entrepreneurs", "freelancer", "designagency", "webdesignservice"]                           # Do not include tweets with these words when retweeting.	
 
 def compose_message(rss_item):
 	"""Compose a tweet from title, link, and description, and then return the final tweet message."""
@@ -62,7 +62,7 @@ def get_query():
 	exclude = " -".join(Settings.RetweetExcludeWords)
 	return include + exclude
 
-def search_and_retweet(query, count=10):
+def search_and_retweet(query, count=5):
 	"""Search for a query in tweets, and retweet those tweets."""
 	try:
 		twitter = Twython(config.ConsumerKey, config.ConsumerSecret, config.AccessToken, config.AccessTokenSecret)
